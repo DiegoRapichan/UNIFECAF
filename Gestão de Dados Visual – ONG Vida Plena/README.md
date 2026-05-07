@@ -120,7 +120,7 @@ Beneficiarios ──< Inscricoes >── Eventos
 | ------------------------ | ----------------------------------------------------------------------------- |
 | Base pública no Airtable | [Acessar projeto](https://airtable.com/appfCvZs2c9s0fV4m/shrkjx3eR8jBHYrcH)   |
 | Dashboard do Projeto     | [Acessar Dashboard](https://airtable.com/appfCvZs2c9s0fV4m/shr7hHwX6xFAyyGon) |
-| Vídeo pitch (YouTube)    | _(colar o link após gravar)_                                                  |
+| Vídeo pitch (YouTube)    | [Acessar Vídeo](https://youtu.be/M-fhZcZFZvA)                                 |
 | Parte Teórica (PDF)      | [Acessar Documento](teorica/parte_teorica_ong_vida_plena_Diego_Rapichan.pdf)  |
 
 ---
