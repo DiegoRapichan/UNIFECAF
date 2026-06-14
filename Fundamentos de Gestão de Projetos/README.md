@@ -30,7 +30,7 @@ O InsightFlow AI é uma plataforma SaaS que processa automaticamente grandes vol
 | Documento de MVP | https://diegorapichan.github.io/UNIFECAF/Fundamentos%20de%20Gest%C3%A3o%20de%20Projetos/02_documento_mvp.html |
 | Roadmap Visual   | https://diegorapichan.github.io/UNIFECAF/Fundamentos%20de%20Gest%C3%A3o%20de%20Projetos/03_roadmap.html       |
 | Matriz de Riscos | https://diegorapichan.github.io/UNIFECAF/Fundamentos%20de%20Gest%C3%A3o%20de%20Projetos/04_matriz_riscos.html |
-| Vídeo Pitch      | https://youtu.be/IfLtWlkn6hE_                                                                                 |
+| Vídeo Pitch      | https://youtu.be/IfLtWlkn6hE                                                                                  |
 
 ### Como publicar no GitHub Pages (2 minutos)
 
