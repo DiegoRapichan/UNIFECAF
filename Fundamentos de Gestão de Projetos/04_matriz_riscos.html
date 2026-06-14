@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InsightFlow AI — Matriz de Riscos</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --ink: #0D1117; --ink-mid: #3D4451; --ink-soft: #6B7280;
+    --line: #E4E7ED; --bg: #F8F9FC; --white: #FFFFFF;
+    --alto-bg: #FEF2F2; --alto-text: #B91C1C; --alto-border: #FECACA;
+    --medio-bg: #FFFBEB; --medio-text: #B45309; --medio-border: #FDE68A;
+    --baixo-bg: #F0FDF4; --baixo-text: #16A34A; --baixo-border: #BBF7D0;
+    --blue: #1D4ED8; --blue-soft: #EFF6FF; --blue-mid: #BFDBFE;
+  }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--ink); min-height: 100vh; padding: 32px 24px 48px; }
+
+  header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1.5px solid var(--line); }
+  .logo { font-size: 22px; font-weight: 600; letter-spacing: -.5px; }
+  .logo span { color: var(--blue); }
+  .subtitle { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--ink-soft); letter-spacing: .08em; text-transform: uppercase; margin-top: 4px; }
+  .meta { text-align: right; font-family: 'DM Mono', monospace; font-size: 10px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .06em; line-height: 1.8; }
+
+  .legend {
+    display: flex; gap: 12px; margin-bottom: 20px; align-items: center; flex-wrap: wrap;
+  }
+  .legend-label { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .08em; margin-right: 4px; }
+  .chip { padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 500; border: 1px solid; }
+  .chip.alto { background: var(--alto-bg); color: var(--alto-text); border-color: var(--alto-border); }
+  .chip.medio { background: var(--medio-bg); color: var(--medio-text); border-color: var(--medio-border); }
+  .chip.baixo { background: var(--baixo-bg); color: var(--baixo-text); border-color: var(--baixo-border); }
+  .chip.method { background: var(--blue-soft); color: var(--blue); border-color: var(--blue-mid); font-size: 11px; }
+
+  .section-label { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: .1em; color: var(--ink-soft); margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid var(--line); }
+
+  table { width: 100%; border-collapse: collapse; background: var(--white); border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,.06); }
+  thead th { padding: 12px 14px; text-align: left; font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; color: #94A3B8; text-transform: uppercase; letter-spacing: .08em; background: var(--ink); }
+  thead th.center { text-align: center; }
+  tbody tr { border-bottom: 1px solid var(--line); transition: background .15s; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: #FAFBFF; }
+  td { padding: 13px 14px; font-size: 12.5px; color: var(--ink-mid); vertical-align: top; }
+  td.center { text-align: center; }
+  td.num { font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500; color: var(--ink-soft); text-align: center; width: 36px; }
+
+  .risk-name { font-size: 13px; font-weight: 600; color: var(--ink); display: block; margin-bottom: 3px; }
+  .risk-desc { font-size: 11.5px; color: var(--ink-soft); line-height: 1.5; }
+  .risk-new { font-size: 10px; font-weight: 500; padding: 1px 6px; border-radius: 10px; background: var(--baixo-bg); color: var(--baixo-text); margin-left: 6px; vertical-align: middle; }
+
+  .score-pill {
+    display: inline-block; padding: 4px 12px; border-radius: 20px; font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500; border: 1px solid;
+  }
+  .score-alto { background: var(--alto-bg); color: var(--alto-text); border-color: var(--alto-border); }
+  .score-medio { background: var(--medio-bg); color: var(--medio-text); border-color: var(--medio-border); }
+  .score-baixo { background: var(--baixo-bg); color: var(--baixo-text); border-color: var(--baixo-border); }
+
+  .num-val { font-family: 'DM Mono', monospace; font-size: 14px; font-weight: 600; }
+  .num-alto { color: var(--alto-text); }
+  .num-medio { color: var(--medio-text); }
+  .num-baixo { color: var(--baixo-text); }
+
+  .resp { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 6px; background: #F1F5F9; color: var(--ink-soft); white-space: nowrap; }
+
+  .formula-box {
+    margin-top: 20px; padding: 14px 18px; background: var(--blue-soft); border: 1px solid var(--blue-mid);
+    border-radius: 10px; font-size: 12.5px; color: var(--ink-mid); line-height: 1.7;
+    display: flex; gap: 24px; flex-wrap: wrap;
+  }
+  .formula-box strong { color: var(--blue); }
+
+  footer { margin-top: 28px; padding-top: 16px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; }
+  footer span { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--ink-soft); letter-spacing: .06em; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="logo">Insight<span>Flow</span> AI</div>
+    <div class="subtitle">Matriz de Riscos — 8 Riscos · Framework PMI/PMBOK</div>
+  </div>
+  <div class="meta">
+    Fundamentos de Gestão de Projetos · UniFECAF · 2026<br>
+    Diego Colombari Rapichan
+  </div>
+</header>
+
+<div class="legend">
+  <span class="legend-label">Nível:</span>
+  <span class="chip alto">Alto (Score ≥ 15)</span>
+  <span class="chip medio">Médio (8–14)</span>
+  <span class="chip baixo">Baixo (≤ 7)</span>
+  <span class="chip method">Score = Probabilidade × Impacto (escala 1–5)</span>
+</div>
+
+<div class="section-label">Identificação, Classificação e Estratégias de Mitigação</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Risco</th>
+      <th class="center">Prob.</th>
+      <th class="center">Impacto</th>
+      <th class="center">Score</th>
+      <th>Estratégia de Mitigação</th>
+      <th>Responsável</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="num">R1</td>
+      <td>
+        <span class="risk-name">Alucinações do LLM</span>
+        <span class="risk-desc">Insights incorretos ou fabricados entregues como fato ao time de negócio</span>
+      </td>
+      <td class="center"><span class="num-val num-alto">4</span></td>
+      <td class="center"><span class="num-val num-alto">5</span></td>
+      <td class="center"><span class="score-pill score-alto">20</span></td>
+      <td style="font-size:12px">Human-in-the-loop obrigatório; fontes visíveis por insight; circuit breaker para outputs com baixa confiança; testes com dados reais antes do launch</td>
+      <td><span class="resp">Tech Lead + PM</span></td>
+    </tr>
+    <tr>
+      <td class="num">R2</td>
+      <td>
+        <span class="risk-name">Vazamento de dados (PII)</span>
+        <span class="risk-desc">Dados sensíveis de consumidores expostos via logs, prompts ou respostas da API de LLM</span>
+      </td>
+      <td class="center"><span class="num-val num-alto">3</span></td>
+      <td class="center"><span class="num-val num-alto">5</span></td>
+      <td class="center"><span class="score-pill score-alto">15</span></td>
+      <td style="font-size:12px">Anonimização/pseudonimização obrigatória pré-LLM; DPA formal com provedor; auditoria de logs; política de retenção de dados</td>
+      <td><span class="resp">Eng. Segurança + DPO</span></td>
+    </tr>
+    <tr>
+      <td class="num">R3</td>
+      <td>
+        <span class="risk-name">Baixa adoção</span>
+        <span class="risk-desc">Usuários não confiam nos insights gerados ou acham o produto difícil de usar</span>
+      </td>
+      <td class="center"><span class="num-val num-medio">3</span></td>
+      <td class="center"><span class="num-val num-medio">4</span></td>
+      <td class="center"><span class="score-pill score-medio">12</span></td>
+      <td style="font-size:12px">Usuários reais no processo de design desde Fase 0; modo "debug" mostrando tickets-fonte de cada insight; onboarding guiado</td>
+      <td><span class="resp">PM + UX Designer</span></td>
+    </tr>
+    <tr>
+      <td class="num">R4</td>
+      <td>
+        <span class="risk-name">Dependência de provedor LLM</span>
+        <span class="risk-desc">Indisponibilidade, mudança de preço ou descontinuação da API impacta a operação</span>
+      </td>
+      <td class="center"><span class="num-val num-medio">3</span></td>
+      <td class="center"><span class="num-val num-medio">4</span></td>
+      <td class="center"><span class="score-pill score-medio">12</span></td>
+      <td style="font-size:12px">Arquitetura multi-provider (OpenAI + Claude + fallback local); caching de respostas; monitoramento de custo por request</td>
+      <td><span class="resp">Arquiteto de Solução</span></td>
+    </tr>
+    <tr>
+      <td class="num">R5</td>
+      <td>
+        <span class="risk-name">Escopo creep</span>
+        <span class="risk-desc">Solicitações de novas funcionalidades por stakeholders diluem o foco e atrasam o MVP</span>
+      </td>
+      <td class="center"><span class="num-val num-medio">4</span></td>
+      <td class="center"><span class="num-val num-medio">3</span></td>
+      <td class="center"><span class="score-pill score-medio">12</span></td>
+      <td style="font-size:12px">Backlog público e priorizado; revisão quinzenal de escopo; PM com autoridade formal para recusar itens fora do roadmap</td>
+      <td><span class="resp">Product Manager</span></td>
+    </tr>
+    <tr>
+      <td class="num">R6</td>
+      <td>
+        <span class="risk-name">Qualidade dos dados de entrada</span>
+        <span class="risk-desc">Tickets mal formatados, duplicados ou incompletos prejudicam a qualidade dos insights</span>
+      </td>
+      <td class="center"><span class="num-val num-medio">4</span></td>
+      <td class="center"><span class="num-val num-medio">3</span></td>
+      <td class="center"><span class="score-pill score-medio">12</span></td>
+      <td style="font-size:12px">Pipeline de pré-processamento robusto (normalização, deduplicação, validação); relatório de qualidade exibido no momento da importação</td>
+      <td><span class="resp">Eng. de Dados</span></td>
+    </tr>
+    <tr>
+      <td class="num">R7</td>
+      <td>
+        <span class="risk-name">Conformidade LGPD / GDPR / EU AI Act</span>
+        <span class="risk-desc">Dados de atendimento com PII sujeitos a regulação — não conformidade pode inviabilizar a operação</span>
+      </td>
+      <td class="center"><span class="num-val num-baixo">2</span></td>
+      <td class="center"><span class="num-val num-alto">5</span></td>
+      <td class="center"><span class="score-pill score-baixo">10</span></td>
+      <td style="font-size:12px">Mapeamento de dados pré-MVP; T&C revisados por advogado; suporte a right to be forgotten; monitoramento do EU AI Act para operações na UE</td>
+      <td><span class="resp">Jurídico + DPO</span></td>
+    </tr>
+    <tr>
+      <td class="num">R8</td>
+      <td>
+        <span class="risk-name">Risco de mercado <span class="risk-new">novo</span></span>
+        <span class="risk-desc">Concorrentes estabelecidos (Zendesk, Salesforce) embarcando IA nativa reduzem o espaço de mercado</span>
+      </td>
+      <td class="center"><span class="num-val num-baixo">3</span></td>
+      <td class="center"><span class="num-val num-baixo">3</span></td>
+      <td class="center"><span class="score-pill score-baixo">9</span></td>
+      <td style="font-size:12px">Posicionamento mid-market; estratégia de integração (complementar, não concorrente); diferenciação via efeito de rede dos dados acumulados</td>
+      <td><span class="resp">CEO + PM</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="formula-box">
+  <div><strong>Metodologia:</strong> Framework PMI/PMBOK · Score = Probabilidade (1–5) × Impacto (1–5)</div>
+  <div><strong>Estratégias:</strong> Evitar · Mitigar · Transferir · Aceitar</div>
+  <div><strong>Revisão:</strong> Quinzenal durante MVP · Mensal nas demais fases</div>
+</div>
+
+<footer>
+  <span>InsightFlow AI · Matriz de Riscos · Versão 2.0</span>
+  <span>Diego Colombari Rapichan · UniFECAF · Junho 2026</span>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InsightFlow AI — Documento de MVP</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --ink: #0D1117; --ink-mid: #3D4451; --ink-soft: #6B7280;
+    --line: #E4E7ED; --line-mid: #CBD2DA;
+    --blue: #1D4ED8; --blue-soft: #EFF4FF; --blue-mid: #BFDBFE;
+    --must-bg: #FEF2F2; --must-text: #B91C1C; --must-border: #FECACA;
+    --should-bg: #FFFBEB; --should-text: #B45309; --should-border: #FDE68A;
+    --green: #16A34A; --green-soft: #F0FDF4; --green-border: #BBF7D0;
+    --white: #FFFFFF; --bg: #F8F9FC;
+    --s1: #EFF6FF; --s2: #F0FDF4; --s3: #FFFBEB;
+  }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--ink); min-height: 100vh; padding: 32px 24px 48px; }
+
+  header {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1.5px solid var(--line);
+  }
+  .logo { font-size: 22px; font-weight: 600; letter-spacing: -.5px; }
+  .logo span { color: var(--blue); }
+  .subtitle { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--ink-soft); letter-spacing: .08em; text-transform: uppercase; margin-top: 4px; }
+  .meta { text-align: right; font-family: 'DM Mono', monospace; font-size: 10px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .06em; line-height: 1.8; }
+
+  .summary-bar {
+    display: flex; gap: 16px; margin-bottom: 24px; flex-wrap: wrap;
+  }
+  .s-chip {
+    padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 500;
+    border: 1px solid;
+  }
+  .s-chip.must { background: var(--must-bg); color: var(--must-text); border-color: var(--must-border); }
+  .s-chip.should { background: var(--should-bg); color: var(--should-text); border-color: var(--should-border); }
+  .s-chip.info { background: var(--blue-soft); color: var(--blue); border-color: var(--blue-mid); }
+
+  .section-label {
+    font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500;
+    text-transform: uppercase; letter-spacing: .1em; color: var(--ink-soft);
+    margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid var(--line);
+  }
+
+  table { width: 100%; border-collapse: collapse; background: var(--white); border-radius: 12px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+  thead tr { background: var(--ink); }
+  thead th { padding: 12px 14px; text-align: left; font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; color: #94A3B8; text-transform: uppercase; letter-spacing: .08em; }
+  tbody tr { border-bottom: 1px solid var(--line); transition: background .15s; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: var(--blue-soft); }
+  td { padding: 14px; vertical-align: top; font-size: 13px; color: var(--ink-mid); }
+  td.num { font-family: 'DM Mono', monospace; font-size: 14px; font-weight: 500; color: var(--ink-soft); text-align: center; width: 40px; }
+  td.name strong { display: block; font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+  td.name span { font-size: 12px; color: var(--ink-soft); line-height: 1.5; }
+  td.ac { font-size: 11.5px; font-style: italic; color: var(--green); padding-top: 4px; }
+  td.sprint { font-family: 'DM Mono', monospace; font-size: 11px; text-align: center; color: var(--ink-soft); }
+
+  .badge {
+    display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 500; border: 1px solid; white-space: nowrap;
+  }
+  .badge.must { background: var(--must-bg); color: var(--must-text); border-color: var(--must-border); }
+  .badge.should { background: var(--should-bg); color: var(--should-text); border-color: var(--should-border); }
+
+  .sprint-block {
+    display: inline-block; padding: 2px 8px; border-radius: 6px; font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500;
+  }
+  .sp1 { background: var(--s1); color: var(--blue); }
+  .sp2 { background: var(--s2); color: var(--green); }
+  .sp3 { background: var(--s3); color: #B45309; }
+
+  .out-of-scope {
+    margin-top: 20px; padding: 14px 18px; background: #F1F5F9; border-radius: 10px;
+    border-left: 3px solid var(--line-mid);
+    font-size: 12.5px; color: var(--ink-soft); line-height: 1.7;
+  }
+  .out-of-scope strong { color: var(--ink-mid); }
+
+  footer { margin-top: 28px; padding-top: 16px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; }
+  footer span { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--ink-soft); letter-spacing: .06em; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="logo">Insight<span>Flow</span> AI</div>
+    <div class="subtitle">Documento de MVP — Funcionalidades, Prioridade e Critérios de Aceitação</div>
+  </div>
+  <div class="meta">
+    Fundamentos de Gestão de Projetos · UniFECAF · 2026<br>
+    Diego Colombari Rapichan
+  </div>
+</header>
+
+<div class="summary-bar">
+  <span class="s-chip info">6 Funcionalidades</span>
+  <span class="s-chip info">3 Sprints · 6 Semanas</span>
+  <span class="s-chip must">5 Must Have</span>
+  <span class="s-chip should">1 Should Have</span>
+</div>
+
+<div class="section-label">Backlog do MVP — Framework MoSCoW</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Funcionalidade</th>
+      <th>Critério de Aceitação</th>
+      <th>Prioridade</th>
+      <th>Sprint</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="num">01</td>
+      <td class="name">
+        <strong>Ingestão de dados</strong>
+        <span>Upload CSV/JSON + conector Zendesk via API REST. Pipeline de normalização e deduplicação automática.</span>
+      </td>
+      <td class="ac">✓ 100% dos registros importados sem erro em menos de 2 minutos</td>
+      <td><span class="badge must">Must Have</span></td>
+      <td><span class="sprint-block sp1">Sprint 1</span></td>
+    </tr>
+    <tr>
+      <td class="num">02</td>
+      <td class="name">
+        <strong>Autenticação e multi-tenant</strong>
+        <span>Login seguro com MFA. Isolamento total de dados por empresa. Conformidade LGPD desde o MVP.</span>
+      </td>
+      <td class="ac">✓ Nenhum dado do cliente A visível para cliente B em nenhuma circunstância</td>
+      <td><span class="badge must">Must Have</span></td>
+      <td><span class="sprint-block sp1">Sprint 1</span></td>
+    </tr>
+    <tr>
+      <td class="num">03</td>
+      <td class="name">
+        <strong>Clustering de temas por LLM</strong>
+        <span>Agrupamento automático de interações em temas recorrentes via embeddings semânticos + IA Generativa.</span>
+      </td>
+      <td class="ac">✓ Temas com 80%+ de coerência validada por especialista do domínio</td>
+      <td><span class="badge must">Must Have</span></td>
+      <td><span class="sprint-block sp1">Sprint 1</span></td>
+    </tr>
+    <tr>
+      <td class="num">04</td>
+      <td class="name">
+        <strong>Dashboard de insights</strong>
+        <span>Painel com top 5 temas críticos, volume, tendência temporal e nível de urgência calculado por IA.</span>
+      </td>
+      <td class="ac">✓ Usuário identifica o tema prioritário em menos de 30 segundos sem treinamento</td>
+      <td><span class="badge must">Must Have</span></td>
+      <td><span class="sprint-block sp2">Sprint 2</span></td>
+    </tr>
+    <tr>
+      <td class="num">05</td>
+      <td class="name">
+        <strong>Geração de plano de ação</strong>
+        <span>IA sugere 3 ações concretas por tema, editáveis pelo usuário e exportáveis em PDF com rastreabilidade.</span>
+      </td>
+      <td class="ac">✓ Plano gerado em menos de 10 segundos · Exportação PDF funcional em 100% dos casos</td>
+      <td><span class="badge must">Must Have</span></td>
+      <td><span class="sprint-block sp2">Sprint 2</span></td>
+    </tr>
+    <tr>
+      <td class="num">06</td>
+      <td class="name">
+        <strong>Resumo executivo automático</strong>
+        <span>Relatório semanal em PDF/e-mail com principais alertas, temas emergentes e ações sugeridas.</span>
+      </td>
+      <td class="ac">✓ E-mail entregue toda segunda-feira às 8h com dados consolidados da semana anterior</td>
+      <td><span class="badge should">Should Have</span></td>
+      <td><span class="sprint-block sp3">Sprint 3</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="out-of-scope">
+  <strong>Fora do MVP — Fase 2+:</strong> Integração nativa Salesforce / Freshdesk · Análise de sentimento granular · Alertas em tempo real por threshold · Suporte multilingua (EN, ES) · Modelo preditivo de churn · API pública · Templates por indústria
+</div>
+
+<footer>
+  <span>InsightFlow AI · Documento de MVP · Versão 2.0</span>
+  <span>Diego Colombari Rapichan · UniFECAF · Junho 2026</span>
+</footer>
+
+</body>
+</html>

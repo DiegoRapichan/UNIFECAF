@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InsightFlow AI — Roadmap</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --ink: #0D1117; --ink-mid: #3D4451; --ink-soft: #6B7280;
+    --line: #E4E7ED; --bg: #F8F9FC; --white: #FFFFFF;
+    --c0: #6B7280; --c0-bg: #F9FAFB; --c0-border: #E5E7EB;
+    --c1: #1D4ED8; --c1-bg: #EFF6FF; --c1-border: #BFDBFE;
+    --c2: #7C3AED; --c2-bg: #F5F3FF; --c2-border: #DDD6FE;
+    --c3: #16A34A; --c3-bg: #F0FDF4; --c3-border: #BBF7D0;
+  }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--ink); min-height: 100vh; padding: 32px 24px 48px; }
+
+  header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 32px; padding-bottom: 20px; border-bottom: 1.5px solid var(--line); }
+  .logo { font-size: 22px; font-weight: 600; letter-spacing: -.5px; }
+  .logo span { color: #1D4ED8; }
+  .subtitle { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--ink-soft); letter-spacing: .08em; text-transform: uppercase; margin-top: 4px; }
+  .meta { text-align: right; font-family: 'DM Mono', monospace; font-size: 10px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .06em; line-height: 1.8; }
+
+  /* Timeline bar */
+  .timeline {
+    display: flex; gap: 0; margin-bottom: 32px; border-radius: 12px; overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,.07);
+  }
+  .phase {
+    flex: 1; padding: 20px 16px; position: relative;
+    border-right: 2px solid rgba(255,255,255,.3);
+    transition: transform .2s;
+  }
+  .phase:last-child { border-right: none; }
+  .phase:hover { transform: translateY(-2px); }
+
+  .ph0 { background: #1C1F26; }
+  .ph1 { background: #1E3A8A; }
+  .ph2 { background: #4C1D95; }
+  .ph3 { background: #14532D; }
+
+  .phase-week {
+    font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 500;
+    text-transform: uppercase; letter-spacing: .1em; opacity: .6; margin-bottom: 6px;
+    color: #fff;
+  }
+  .phase-num { font-size: 11px; font-weight: 500; color: rgba(255,255,255,.5); margin-bottom: 4px; }
+  .phase-name { font-size: 18px; font-weight: 600; color: #fff; letter-spacing: -.3px; margin-bottom: 12px; }
+  .phase-items { list-style: none; }
+  .phase-items li { font-size: 11.5px; color: rgba(255,255,255,.75); padding: 3px 0; border-bottom: 1px solid rgba(255,255,255,.08); line-height: 1.5; }
+  .phase-items li:last-child { border-bottom: none; }
+  .phase-res {
+    margin-top: 12px; padding: 6px 10px; border-radius: 6px; background: rgba(255,255,255,.1);
+    font-size: 11px; color: rgba(255,255,255,.6); font-family: 'DM Mono', monospace;
+  }
+
+  /* Criteria table */
+  .section-label {
+    font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500;
+    text-transform: uppercase; letter-spacing: .1em; color: var(--ink-soft);
+    margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid var(--line);
+  }
+
+  table { width: 100%; border-collapse: collapse; background: var(--white); border-radius: 12px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.05); margin-bottom: 24px; }
+  thead th { padding: 12px 16px; text-align: left; font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; color: #94A3B8; text-transform: uppercase; letter-spacing: .08em; background: var(--ink); }
+  tbody tr { border-bottom: 1px solid var(--line); }
+  tbody tr:last-child { border-bottom: none; }
+  td { padding: 14px 16px; font-size: 13px; color: var(--ink-mid); vertical-align: middle; }
+  td:first-child { width: 130px; }
+
+  .phase-tag {
+    display: inline-flex; align-items: center; gap: 8px; padding: 4px 12px;
+    border-radius: 20px; font-size: 12px; font-weight: 500; border: 1px solid;
+  }
+  .tag0 { background: var(--c0-bg); color: var(--c0); border-color: var(--c0-border); }
+  .tag1 { background: var(--c1-bg); color: var(--c1); border-color: var(--c1-border); }
+  .tag2 { background: var(--c2-bg); color: var(--c2); border-color: var(--c2-border); }
+  .tag3 { background: var(--c3-bg); color: var(--c3); border-color: var(--c3-border); }
+
+  .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .d0 { background: var(--c0); }
+  .d1 { background: var(--c1); }
+  .d2 { background: var(--c2); }
+  .d3 { background: var(--c3); }
+
+  .metric { font-family: 'DM Mono', monospace; font-size: 11.5px; color: var(--ink-soft); }
+
+  .note-box {
+    padding: 14px 18px; background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 10px;
+    font-size: 12.5px; color: #92400E; line-height: 1.7;
+  }
+  .note-box strong { color: #78350F; }
+
+  footer { margin-top: 28px; padding-top: 16px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; }
+  footer span { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--ink-soft); letter-spacing: .06em; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="logo">Insight<span>Flow</span> AI</div>
+    <div class="subtitle">Roadmap Visual — 4 Fases · 28 Semanas</div>
+  </div>
+  <div class="meta">
+    Fundamentos de Gestão de Projetos · UniFECAF · 2026<br>
+    Diego Colombari Rapichan
+  </div>
+</header>
+
+<div class="timeline">
+  <div class="phase ph0">
+    <div class="phase-week">Sem 1–2</div>
+    <div class="phase-num">Fase 0</div>
+    <div class="phase-name">Descoberta</div>
+    <ul class="phase-items">
+      <li>5 entrevistas com usuários reais</li>
+      <li>Backlog inicial priorizado</li>
+      <li>Stack técnica definida</li>
+      <li>CI/CD configurado</li>
+    </ul>
+    <div class="phase-res">👤 1 PM + 1 designer</div>
+  </div>
+  <div class="phase ph1">
+    <div class="phase-week">Sem 3–8</div>
+    <div class="phase-num">Fase 1</div>
+    <div class="phase-name">MVP</div>
+    <ul class="phase-items">
+      <li>Ingestão + auth + pipeline LLM</li>
+      <li>Clustering + dashboard</li>
+      <li>Plano de ação + resumo</li>
+      <li>Go-live com piloto</li>
+    </ul>
+    <div class="phase-res">👤 1 PM + 2 devs + 1 designer</div>
+  </div>
+  <div class="phase ph2">
+    <div class="phase-week">Sem 9–16</div>
+    <div class="phase-num">Fase 2</div>
+    <div class="phase-name">Expansão</div>
+    <ul class="phase-items">
+      <li>Zendesk / Freshdesk nativos</li>
+      <li>Análise de sentimento</li>
+      <li>Alertas proativos</li>
+      <li>Suporte EN básico</li>
+    </ul>
+    <div class="phase-res">👤 +1 dev + 1 CS</div>
+  </div>
+  <div class="phase ph3">
+    <div class="phase-week">Sem 17–28</div>
+    <div class="phase-num">Fase 3</div>
+    <div class="phase-name">Escala & IA Avançada</div>
+    <ul class="phase-items">
+      <li>Modelo preditivo de churn</li>
+      <li>API pública</li>
+      <li>Multilingua PT/EN/ES</li>
+      <li>5+ clientes pagantes</li>
+    </ul>
+    <div class="phase-res">👤 Time completo + data scientist</div>
+  </div>
+</div>
+
+<div class="section-label">Critérios de Conclusão por Fase</div>
+<table>
+  <thead>
+    <tr>
+      <th>Fase</th>
+      <th>Critério Principal</th>
+      <th>Métrica de Gate</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><span class="phase-tag tag0"><span class="dot d0"></span>Fase 0</span></td>
+      <td>Problem-solution fit validado</td>
+      <td class="metric">80%+ dos entrevistados confirmam criticidade do problema</td>
+    </tr>
+    <tr>
+      <td><span class="phase-tag tag1"><span class="dot d1"></span>Fase 1</span></td>
+      <td>Piloto ativo com NPS positivo</td>
+      <td class="metric">NPS ≥ 35 · Retenção semanal ≥ 60% · 0 incidentes críticos de segurança</td>
+    </tr>
+    <tr>
+      <td><span class="phase-tag tag2"><span class="dot d2"></span>Fase 2</span></td>
+      <td>Crescimento de volume e retenção</td>
+      <td class="metric">Volume de dados processados duplicado · Churn &lt; 10%</td>
+    </tr>
+    <tr>
+      <td><span class="phase-tag tag3"><span class="dot d3"></span>Fase 3</span></td>
+      <td>Revenue e escala comprovados</td>
+      <td class="metric">5+ clientes pagantes · MRR crescendo ≥ 15%/mês</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="note-box">
+  <strong>Princípio orientador:</strong> O roadmap é orientado a critérios, não a datas. Cada fase só avança quando as métricas de gate são atingidas — não por calendário. Isso evita o erro clássico de escalar um produto que ainda não foi validado com usuários reais.
+</div>
+
+<footer>
+  <span>InsightFlow AI · Roadmap Visual · Versão 2.0</span>
+  <span>Diego Colombari Rapichan · UniFECAF · Junho 2026</span>
+</footer>
+
+</body>
+</html>
